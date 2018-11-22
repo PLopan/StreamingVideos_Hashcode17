@@ -87,7 +87,7 @@ class ProblemData:
         with open(output_file, 'w') as f:
             f.write('{}\n'.format(used_caches))
             for i, cache in enumerate(self.cache_servers):
-                f.write('{} '.format(i))
+                f.write('{}'.format(i))
                 for j in cache.videos:
-                    f.write('{} '.format(j))
+                    f.write(' {}'.format(j))
                 f.write('\n')
