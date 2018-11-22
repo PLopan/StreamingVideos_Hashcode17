@@ -11,4 +11,5 @@ if __name__=='__main__':
     data.compute_video_values()
     data.compute_total_values()
     data.fill_caches()
+    data.write_output_file(output_file)
     print("Executed in {} seconds.".format(time.time() - start_time))

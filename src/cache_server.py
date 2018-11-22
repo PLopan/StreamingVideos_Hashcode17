@@ -17,3 +17,6 @@ class CacheServer:
 
     def is_full(self):
         return self.remaining_size == 0
+
+    def is_empty(self):
+        return self.remaining_size == self.total_size

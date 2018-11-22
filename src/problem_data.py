@@ -79,3 +79,15 @@ class ProblemData:
             elif self.cache_servers[cache_id].does_video_fit(self.video_sizes[video_id]):
                 self.cache_servers[cache_id].add_video(video_id, self.video_sizes[video_id])
 
+    def write_output_file(self, output_file):
+        used_caches = 0
+        for cache in self.cache_servers:
+            if not cache.is_empty():
+                used_caches += 1
+        with open(output_file, 'w') as f:
+            f.write('{}\n'.format(used_caches))
+            for i, cache in enumerate(self.cache_servers):
+                f.write('{} '.format(i))
+                for j in cache.videos:
+                    f.write('{} '.format(j))
+                f.write('\n')
