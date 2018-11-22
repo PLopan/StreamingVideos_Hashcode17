@@ -13,6 +13,7 @@ class ProblemData:
         self.video_sizes = []
         self.endpoints = []
         self.requests = []
+        self.total_video_values = []
 
     def load_data(self, input_file):
         with open(input_file, 'r') as f:
@@ -44,3 +45,20 @@ class ProblemData:
                     value = req.n_requests * (endp.datacenter_latency - cache.latency)
                     value = value / float(self.video_sizes[req.video_id])
                     endp.video_values[(cache.cache_id, req.video_id)] = value
+
+    def compute_total_values(self):
+        """
+            Take into consideration the values of videos considering every endpoint, not only one.
+            The list total_video_values is ordered by total value.
+        """
+        total_video_values_dict = {}
+        for endp in self.endpoints:
+            for key, value in endp.video_values.items():
+                total_value = total_video_values_dict.get(key, 0)
+                total_value += value
+                total_video_values_dict[key] = total_value
+
+        for (cache_id, video_id), value in total_video_values_dict.items():
+            self.total_video_values.append((cache_id, video_id, value))
+
+        self.total_video_values = sorted(self.total_video_values, key=lambda x: -x[2])
