@@ -1,8 +1,9 @@
 import time
 from problem_data import ProblemData
 
-input_file = 'input_datasets/me_at_the_zoo.in'
-output_file = 'me_at_the_zoo.out'
+dataset = 'kittens'
+input_file = 'input_datasets/{}.in'.format(dataset)
+output_file = dataset + '.out'
 
 if __name__=='__main__':
     start_time = time.time()
