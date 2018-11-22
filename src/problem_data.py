@@ -33,3 +33,14 @@ class ProblemData:
                 r = VideoRequest(video, endpoint, num_requests)
                 self.endpoints[endpoint].video_requests.append(r)
                 self.requests.append(r)
+
+    def compute_video_values(self):
+        """
+            Value is equal to (number of times requested * time saved) / video size
+        """
+        for endp in self.endpoints:
+            for req in endp.video_requests:
+                for cache in endp.connected_caches:
+                    value = req.n_requests * (endp.datacenter_latency - cache.latency)
+                    value = value / float(self.video_sizes[req.video_id])
+                    endp.video_values[(cache.cache_id, req.video_id)] = value
