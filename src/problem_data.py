@@ -1,6 +1,7 @@
 from endpoint import Endpoint
 from cache_connection import CacheConnection
 from video_request import VideoRequest
+from cache_server import CacheServer
 
 
 class ProblemData:
@@ -14,6 +15,7 @@ class ProblemData:
         self.endpoints = []
         self.requests = []
         self.total_video_values = []
+        self.cache_servers = []
 
     def load_data(self, input_file):
         with open(input_file, 'r') as f:
@@ -62,3 +64,18 @@ class ProblemData:
             self.total_video_values.append((cache_id, video_id, value))
 
         self.total_video_values = sorted(self.total_video_values, key=lambda x: -x[2])
+
+    def are_all_caches_full(self):
+        for cache in self.cache_servers:
+            if not cache.is_full():
+                return False
+        return True
+
+    def fill_caches(self):
+        self.cache_servers = [CacheServer(self.s_caches) for _ in range(self.n_caches)]
+        for (cache_id, video_id, value) in self.total_video_values:
+            if self.are_all_caches_full():
+                break
+            elif self.cache_servers[cache_id].does_video_fit(self.video_sizes[video_id]):
+                self.cache_servers[cache_id].add_video(video_id, self.video_sizes[video_id])
+
