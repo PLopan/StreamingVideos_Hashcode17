@@ -3,7 +3,7 @@ from problem_data import ProblemData
 
 dataset = 'kittens'
 input_file = 'input_datasets/{}.in'.format(dataset)
-output_file = dataset + '.out'
+output_file = 'output/' + dataset + '.out'
 
 if __name__=='__main__':
     start_time = time.time()

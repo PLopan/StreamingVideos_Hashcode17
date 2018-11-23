@@ -2,7 +2,7 @@ from endpoint import Endpoint
 from cache_connection import CacheConnection
 from video_request import VideoRequest
 from cache_server import CacheServer
-
+import os
 
 class ProblemData:
     def __init__(self):
@@ -73,14 +73,17 @@ class ProblemData:
 
     def fill_caches(self):
         self.cache_servers = [CacheServer(self.s_caches) for _ in range(self.n_caches)]
+        used_videos = set()
         for (cache_id, video_id, value) in self.total_video_values:
             if self.are_all_caches_full():
                 break
-            elif self.cache_servers[cache_id].does_video_fit(self.video_sizes[video_id]):
+            elif self.cache_servers[cache_id].does_video_fit(self.video_sizes[video_id]) and not video_id in used_videos:
+                used_videos.add(video_id)
                 self.cache_servers[cache_id].add_video(video_id, self.video_sizes[video_id])
 
     def write_output_file(self, output_file):
         used_caches = 0
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
         for cache in self.cache_servers:
             if not cache.is_empty():
                 used_caches += 1
